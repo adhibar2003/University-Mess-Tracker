@@ -1,28 +1,640 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MessTrack — Hostel Mess Management</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MessTrack — Hostel Mess Management</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f4f1;min-height:100vh;display:flex;justify-content:center;padding:20px}
+.wrap{width:100%;max-width:600px}
+.app{background:#f5f4f1;border-radius:16px;overflow:hidden;min-height:580px;position:relative;box-shadow:0 2px 20px rgba(0,0,0,.08)}
+.topbar{background:#fff;border-bottom:0.5px solid rgba(0,0,0,.1);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:52px}
+.logo{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:#1a1a1a}
+.ldot{width:8px;height:8px;border-radius:50%}
+.nav-wrap{background:#fff;border-bottom:0.5px solid rgba(0,0,0,.1);display:flex;padding:0 14px;gap:2px;overflow-x:auto}
+.nav-wrap::-webkit-scrollbar{display:none}
+.nb{font-size:12px;padding:10px 12px;border:none;background:transparent;cursor:pointer;color:#888;border-bottom:2.5px solid transparent;font-family:inherit;white-space:nowrap}
+.nb.on{border-bottom-color:#534AB7;color:#534AB7;font-weight:600}
+.nb:hover:not(.on){color:#333}
+.ct{padding:16px}
+.card{background:#fff;border:0.5px solid rgba(0,0,0,.08);border-radius:14px;padding:14px 18px;margin-bottom:12px}
+.sec{font-size:10px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.met{background:#f8f7f4;border-radius:10px;padding:11px 13px}
+.ml{font-size:11px;color:#999;margin-bottom:3px}
+.mv{font-size:22px;font-weight:600;color:#1a1a1a}
+.ms{font-size:10px;color:#bbb;margin-top:2px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid rgba(0,0,0,.06);font-size:13px}
+.row:last-child{border-bottom:none}
+.rl{color:#888}
+.rv{font-weight:500;color:#1a1a1a}
+.tp{display:inline-flex;align-items:center;gap:5px;background:#E1F5EE;color:#0F6E56;font-size:12px;font-weight:600;padding:4px 11px;border-radius:20px}
+.vb{padding:10px 6px;border:1.5px solid #ddd;border-radius:10px;background:#fff;cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;color:#333;text-align:center;transition:all .15s}
+.vb:hover{background:#f8f7f4}
+.vi{font-size:15px;display:block;margin-bottom:3px}
+.vb.se{border-color:#1D9E75;background:#E1F5EE;color:#0F6E56}
+.vb.sn{border-color:#BA7517;background:#FAEEDA;color:#633806}
+.vb.sa{border-color:#D85A30;background:#FAECE7;color:#4A1B0C}
+.ntc{background:#EEEDFE;border-radius:10px;padding:9px 12px;margin-bottom:7px}
+.nt-t{font-size:10px;color:#534AB7;margin-bottom:2px;font-weight:500}
+.nt-d{font-size:12px;color:#3C3489}
+.il{font-size:11px;color:#666;margin-bottom:4px;display:block;font-weight:500}
+input,textarea,select{width:100%;font-family:inherit;font-size:13px;background:#fff;border:0.5px solid rgba(0,0,0,.15);border-radius:8px;padding:8px 10px;outline:none;color:#1a1a1a}
+input:focus,textarea:focus,select:focus{border-color:#534AB7;box-shadow:0 0 0 2px rgba(83,74,183,.12)}
+textarea{resize:vertical;min-height:60px}
+.ig{margin-bottom:11px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:9px;border:0.5px solid rgba(0,0,0,.12);background:#fff;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;color:#333;transition:all .15s}
+.btn:hover{background:#f5f4f1}
+.btn:active{transform:scale(.98)}
+.bp{background:#534AB7;color:#fff;border-color:#534AB7}
+.bp:hover{background:#3C3489;color:#fff}
+.bg{background:#1D9E75;color:#fff;border-color:#1D9E75}
+.bg:hover{background:#0F6E56;color:#fff}
+.bred{background:#E24B4A;color:#fff;border-color:#E24B4A}
+.bred:hover{background:#A32D2D;color:#fff}
+.bam{background:#BA7517;color:#fff;border-color:#BA7517}
+.bam:hover{background:#854F0B;color:#fff}
+.bw{width:100%;justify-content:center;padding:10px}
+.tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
+.tg{background:#EAF3DE;color:#27500A}
+.ta{background:#FAEEDA;color:#633806}
+.tr{background:#FCEBEB;color:#791F1F}
+.tp2{background:#EEEDFE;color:#3C3489}
+.tb{background:#E6F1FB;color:#0C447C}
+.pb{height:5px;background:#f0efe9;border-radius:4px;margin-top:4px;overflow:hidden}
+.pf{height:100%;border-radius:4px}
+.brow{margin-bottom:7px}
+.brt{display:flex;justify-content:space-between;font-size:11px;color:#999;margin-bottom:2px}
+.sr{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid rgba(0,0,0,.06);font-size:13px}
+.sr:last-child{border-bottom:none}
+.err{background:#FCEBEB;color:#791F1F;border-radius:9px;padding:8px 12px;font-size:12px;margin-bottom:9px}
+.suc{background:#EAF3DE;color:#27500A;border-radius:9px;padding:8px 12px;font-size:12px;margin-bottom:9px}
+.mc{background:#fff;border:0.5px solid rgba(0,0,0,.08);border-radius:14px;padding:14px;cursor:pointer;transition:border-color .15s}
+.mc:hover{border-color:#534AB7;border-width:1.5px}
+.mc-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px}
+.mc-nm{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:2px}
+.mc-sb{font-size:11px;color:#888}
+.mc-bx{display:inline-block;font-size:10px;padding:2px 7px;border-radius:9px;font-weight:600;margin-top:5px}
+.av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+.mi{display:flex;align-items:center;gap:7px;padding:7px 11px;background:#f8f7f4;border-radius:9px;margin-bottom:11px;font-size:12px}
+.mi-d{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.rc{background:#fff;border:0.5px solid rgba(0,0,0,.08);border-radius:14px;padding:12px 16px;margin-bottom:10px}
+.rc-h{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.rc-nm{font-size:13px;font-weight:600;color:#1a1a1a}
+.rc-sb{font-size:11px;color:#888;margin-top:2px}
+.rc-ac{display:flex;gap:7px;margin-top:9px}
+/* Modal */
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px}
+.mdl{background:#fff;border-radius:16px;padding:20px;width:100%;max-width:320px;box-shadow:0 10px 40px rgba(0,0,0,.2)}
+/* Receipt */
+.rbox{background:#f8f7f4;border-radius:14px;padding:18px;text-align:center;margin-bottom:12px}
+.rdiv{border:none;border-top:2px dashed rgba(0,0,0,.1);margin:11px 0}
+.rrow{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;color:#1a1a1a}
+.rtot{display:flex;justify-content:space-between;font-size:15px;font-weight:600;padding:8px 0;border-top:0.5px solid rgba(0,0,0,.08);margin-top:4px;color:#1a1a1a}
+.pay-mth-btn{padding:9px 4px;border:1.5px solid #ddd;border-radius:10px;background:#fff;cursor:pointer;font-family:inherit;font-size:11px;font-weight:500;color:#333;text-align:center;transition:all .15s;display:block;width:100%}
+.pay-mth-btn.sel{border-color:#534AB7;background:#EEEDFE;color:#3C3489}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="app" id="app">
-      <div class="topbar" id="tb">
-        <div class="logo">
-          <div class="ldot" id="ld" style="background:#534AB7"></div>
-          MessTrack
-        </div>
-        <div id="tr"></div>
-      </div>
+<div class="wrap">
+<div class="app" id="app">
+  <div class="topbar" id="tb">
+    <div class="logo"><div class="ldot" id="ld" style="background:#534AB7"></div>MessTrack</div>
+    <div id="tr"></div>
+  </div>
+  <div id="nb"></div>
+  <div class="ct" id="mc"></div>
+  <div id="ml"></div>
+</div>
+</div>
 
-      <div id="nb"></div>
-      <div class="ct" id="mc"></div>
-      <div id="ml"></div>
+<script>
+const MS=[
+  {id:'A',name:'Hostel A Mess',hostel:'Boys Hostel A',color:'#534AB7',bg:'#EEEDFE',cap:120,rates:{breakfast:40,lunch:70,dinner:65}},
+  {id:'B',name:'Hostel B Mess',hostel:'Boys Hostel B',color:'#1D9E75',bg:'#E1F5EE',cap:90,rates:{breakfast:35,lunch:65,dinner:60}},
+  {id:'C',name:'Girls Hostel Mess',hostel:'Girls Hostel C',color:'#D4537E',bg:'#FBEAF0',cap:80,rates:{breakfast:38,lunch:68,dinner:62}},
+  {id:'D',name:'PG Block Mess',hostel:'PG Block D',color:'#BA7517',bg:'#FAEEDA',cap:60,rates:{breakfast:45,lunch:75,dinner:70}},
+];
+
+const US={
+  a1:{id:'a1',name:'Ravi Kumar',role:'admin',mess:'A',pass:'admin123'},
+  a2:{id:'a2',name:'Sunita Devi',role:'admin',mess:'B',pass:'admin123'},
+  a3:{id:'a3',name:'Priya Sharma',role:'admin',mess:'C',pass:'admin123'},
+  a4:{id:'a4',name:'Mohan Das',role:'admin',mess:'D',pass:'admin123'},
+  s1:{id:'s1',name:'Aarav Singh',role:'student',mess:'A',pass:'pass123',room:'A-204'},
+  s2:{id:'s2',name:'Deepak Yadav',role:'student',mess:'A',pass:'pass123',room:'A-310'},
+  s3:{id:'s3',name:'Kiran Patel',role:'student',mess:'B',pass:'pass123',room:'B-112'},
+  s4:{id:'s4',name:'Sneha Gupta',role:'student',mess:'C',pass:'pass123',room:'C-205'},
+  g1:{id:'g1',name:'Rahul Verma',role:'guest',pass:'guest123'},
+  g2:{id:'g2',name:'Meera Joshi',role:'guest',pass:'guest123'},
+};
+
+const DT={};
+MS.forEach(m=>{
+  DT[m.id]={
+    menu:{b:'Poha, Chai, Banana',l:'Dal Tadka, Rice, Roti, Achar',d:'Paneer Curry, Rice, Roti, Salad'},
+    timing:{l:'12:30',d:'20:00'},
+    notices:[{t:'Welcome to '+m.name+'! Menu updated for the week.',ts:'Today, 9:00 AM'}],
+    counts:{tot:m.cap,eat:Math.round(m.cap*.72),no:Math.round(m.cap*.15),abs:Math.round(m.cap*.13)},
+    votes:{},greqs:[]
+  };
+});
+
+let rctr=1000;
+const S={sc:'land',user:null,mess:null,tab:0,lr:'student',sm:null,li:'',le:'',modal:null,rv:null,rm:null};
+const gm=()=>S.mess?MS.find(m=>m.id===S.mess):null;
+const gd=()=>S.mess?DT[S.mess]:null;
+const fmt=t=>{if(!t)return'--';const[h,mn]=t.split(':');const hr=+h;return`${hr>12?hr-12:hr}:${mn} ${hr>=12?'PM':'AM'}`};
+const pct=(n,t)=>Math.round((n/t)*100);
+const ini=n=>n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+const gid=()=>'R'+(++rctr);
+const now2=()=>new Date().toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+
+function render(){
+  const m=gm();
+  document.getElementById('ld').style.background=m?m.color:'#534AB7';
+  document.getElementById('ml').innerHTML=S.modal?rModal():'';
+  if(S.sc==='land'){clr();document.getElementById('mc').innerHTML=rLand();return}
+  if(S.sc==='login'){clr();document.getElementById('mc').innerHTML=rLogin();return}
+  if(S.sc==='glogin'){clr();document.getElementById('mc').innerHTML=rGLogin();return}
+  if(S.sc==='receipt'){clr();document.getElementById('tr').innerHTML=`<button class="btn" style="padding:4px 10px;font-size:12px" onclick="logout()">Sign out</button>`;document.getElementById('mc').innerHTML=rReceipt();return}
+  if(S.user){
+    const u=US[S.user];
+    document.getElementById('tr').innerHTML=`<div style="display:flex;align-items:center;gap:8px">`
+      +(m?`<div class="mi" style="margin:0;padding:3px 9px;background:${m.bg}"><div class="mi-d" style="background:${m.color}"></div><span style="color:${m.color};font-weight:600;font-size:11px">${m.name}</span></div>`
+         :`<div class="mi" style="margin:0;padding:3px 9px"><span style="font-size:11px">🧳 Guest</span></div>`)
+      +`<div class="av" style="background:${m?m.bg:'#EEEDFE'};color:${m?m.color:'#534AB7'}">${ini(u.name)}</div>`
+      +`<button class="btn" style="padding:4px 10px;font-size:12px" onclick="logout()">Sign out</button></div>`;
+    const tabs=u.role==='admin'?['Overview','Menu','Timings','Notices','Guest Requests']:u.role==='guest'?['Request Meal','My Requests']:['Dashboard','My Status','Notices'];
+    document.getElementById('nb').innerHTML='<div class="nav-wrap">'+tabs.map((t,i)=>`<button class="nb${S.tab===i?' on':''}" onclick="st(${i})">${t}</button>`).join('')+'</div>';
+    document.getElementById('mc').innerHTML=u.role==='admin'?rAdmin():u.role==='guest'?rGuest():rStudent();
+  }
+}
+function clr(){document.getElementById('tr').innerHTML='';document.getElementById('nb').innerHTML=''}
+
+/* ─── LANDING ─── */
+function rLand(){
+  return`<div style="text-align:center;padding:20px 0 14px">
+    <div style="font-size:30px;margin-bottom:6px">🍛</div>
+    <h2 style="font-size:20px;font-weight:700;margin-bottom:4px;color:#1a1a1a">MessTrack</h2>
+    <p style="font-size:13px;color:#888;margin-bottom:20px">Select your hostel mess to continue</p>
+  </div>
+  <p style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#999;margin-bottom:10px">Hostel Messes</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+    ${MS.map(m=>`<div class="mc" onclick="selMess('${m.id}')">
+      <div class="mc-ic" style="background:${m.bg}">🍽️</div>
+      <div class="mc-nm">${m.name}</div>
+      <div class="mc-sb">${m.hostel}</div>
+      <div class="mc-bx" style="background:${m.bg};color:${m.color}">${m.cap} seats &nbsp;·&nbsp; Breakfast ₹${m.rates.breakfast} / Lunch ₹${m.rates.lunch}</div>
+    </div>`).join('')}
+  </div>
+  <div class="card" style="border:1.5px dashed rgba(0,0,0,.12);background:#fafafa">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:42px;height:42px;border-radius:12px;background:#EEEDFE;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🧳</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px;color:#1a1a1a">Out-of-Campus / Guest?</div>
+        <div style="font-size:11px;color:#888">Request a paid meal from any hostel mess</div>
+      </div>
+      <button class="btn bp" style="font-size:12px;padding:7px 13px;flex-shrink:0" onclick="S.sc='glogin';render()">Guest Login</button>
     </div>
   </div>
+  <p style="font-size:11px;color:#bbb;text-align:center;margin-top:10px">Each mess is isolated — login with your hostel credentials</p>`;
+}
 
-  <script src="script.js"></script>
+/* ─── MESS LOGIN ─── */
+function rLogin(){
+  const m=MS.find(x=>x.id===S.sm);
+  const ia=S.lr==='admin';
+  const dmap={admin:{A:'a1',B:'a2',C:'a3',D:'a4'},student:{A:'s1',B:'s2',C:'s3',D:'s4'}};
+  const du=US[dmap[S.lr][m.id]];
+  return`<div style="max-width:360px;margin:0 auto">
+    <button class="btn" style="margin-bottom:14px;font-size:12px" onclick="S.sc='land';render()">← Back to messes</button>
+    <div class="card" style="margin-bottom:0">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:0.5px solid rgba(0,0,0,.08)">
+        <div style="width:44px;height:44px;border-radius:12px;background:${m.bg};display:flex;align-items:center;justify-content:center;font-size:20px">🍽️</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:#1a1a1a">${m.name}</div>
+          <div style="font-size:11px;color:#888">${m.hostel}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:7px;margin-bottom:16px">
+        <button class="btn${!ia?' bp':''}" style="flex:1;justify-content:center;font-size:12px" onclick="S.lr='student';S.le='';render()">Student</button>
+        <button class="btn${ia?' bp':''}" style="flex:1;justify-content:center;font-size:12px" onclick="S.lr='admin';S.le='';render()">Mess Manager</button>
+      </div>
+      ${S.le?`<div class="err">${S.le}</div>`:''}
+      ${du?`<div class="suc" style="font-size:11px">Demo — ID: <b>${du.id}</b> &nbsp;·&nbsp; Pass: <b>${ia?'admin123':'pass123'}</b></div>`:'<div style="font-size:11px;color:#999;margin-bottom:9px">No demo account for this combo.</div>'}
+      <div class="ig"><label class="il">${ia?'Manager':'Student'} ID</label><input type="text" id="lid" placeholder="${ia?'e.g. a1':'e.g. s1'}" value="${S.li}"></div>
+      <div class="ig"><label class="il">Password</label><input type="password" id="lpw" placeholder="Enter password" onkeydown="if(event.key==='Enter')dLogin()"></div>
+      <button class="btn bp bw" onclick="dLogin()">Sign in to ${m.name}</button>
+    </div>
+  </div>`;
+}
+
+/* ─── GUEST LOGIN ─── */
+function rGLogin(){
+  return`<div style="max-width:360px;margin:0 auto">
+    <button class="btn" style="margin-bottom:14px;font-size:12px" onclick="S.sc='land';render()">← Back</button>
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:0.5px solid rgba(0,0,0,.08)">
+        <div style="width:44px;height:44px;border-radius:12px;background:#EEEDFE;display:flex;align-items:center;justify-content:center;font-size:20px">🧳</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:#1a1a1a">Guest / Out-of-Campus Login</div>
+          <div style="font-size:11px;color:#888">Request and pay for meals at any mess</div>
+        </div>
+      </div>
+      ${S.le?`<div class="err">${S.le}</div>`:''}
+      <div class="suc" style="font-size:11px">Demo — ID: <b>g1</b> &nbsp;·&nbsp; Pass: <b>guest123</b> &nbsp;·&nbsp; Also try <b>g2</b></div>
+      <div class="ig"><label class="il">Guest ID</label><input type="text" id="lid" placeholder="e.g. g1" value="${S.li}"></div>
+      <div class="ig"><label class="il">Password</label><input type="password" id="lpw" placeholder="Enter password" onkeydown="if(event.key==='Enter')dGLogin()"></div>
+      <button class="btn bp bw" onclick="dGLogin()">Continue as Guest</button>
+    </div>
+  </div>`;
+}
+
+/* ─── GUEST PAGES ─── */
+function rGuest(){return S.tab===0?rGReq():rGMyReqs()}
+
+function rGReq(){
+  const allR=[];
+  MS.forEach(m=>DT[m.id].greqs.filter(r=>r.gid===S.user).forEach(r=>allR.push(r)));
+  const hasPend=allR.some(r=>r.status==='pending'||r.status==='confirmed');
+  return`<div class="mi" style="background:#EEEDFE"><div class="mi-d" style="background:#534AB7"></div><span style="color:#3C3489">Guest mode — you will be charged per meal at any mess</span></div>
+  ${hasPend?'<div class="err">You have a pending/confirmed request. Complete or cancel it before making a new one.</div>':''}
+  <div class="card">
+    <div class="sec">Request a meal</div>
+    <div class="ig"><label class="il">Choose mess</label>
+      <select id="gms" onchange="updR()">
+        ${MS.map(m=>`<option value="${m.id}">${m.name} — ${m.hostel}</option>`).join('')}
+      </select>
+    </div>
+    <div class="ig"><label class="il">Meal type</label>
+      <select id="gml" onchange="updR()">
+        <option value="breakfast">Breakfast</option>
+        <option value="lunch">Lunch</option>
+        <option value="dinner">Dinner</option>
+      </select>
+    </div>
+    <div class="ig"><label class="il">Date</label>
+      <input type="text" id="gdt" value="${new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}">
+    </div>
+    <div class="ig"><label class="il">Special note (optional)</label>
+      <textarea id="gnote" placeholder="Dietary preference, allergy info..."></textarea>
+    </div>
+    <div id="grate" style="background:#f8f7f4;border-radius:10px;padding:10px 13px;margin-bottom:12px;font-size:12px;color:#888">
+      Select mess &amp; meal to see rate
+    </div>
+    <button class="btn bp bw" onclick="subGReq()" ${hasPend?'disabled style="opacity:.5;cursor:not-allowed"':''}>📨 Send Request to Mess Manager</button>
+  </div>`;
+}
+
+function rGMyReqs(){
+  const allR=[];
+  MS.forEach(m=>DT[m.id].greqs.filter(r=>r.gid===S.user).forEach(r=>allR.push({...r,mx:MS.find(x=>x.id===r.mid)})));
+  allR.sort((a,b)=>b.cat-a.cat);
+  if(!allR.length) return`<div class="card" style="text-align:center;padding:30px">
+    <div style="font-size:24px;margin-bottom:9px">📭</div>
+    <div style="font-size:13px;color:#888">No meal requests yet.<br>Go to <b>Request Meal</b> tab to get started.</div>
+  </div>`;
+  return allR.map(r=>{
+    const stg=r.status==='pending'?'<span class="tag tp2">⏳ Pending approval</span>':r.status==='confirmed'?'<span class="tag tb" style="font-size:11px">✅ Confirmed — Pay Now</span>':r.status==='paid'?'<span class="tag tg">💳 Paid</span>':'<span class="tag tr">❌ Rejected</span>';
+    return`<div class="rc">
+      <div class="rc-h">
+        <div>
+          <div class="rc-nm">${r.mx.name}</div>
+          <div class="rc-sb">${r.meal[0].toUpperCase()+r.meal.slice(1)} · ${r.date} · <b>₹${r.amt}</b></div>
+        </div>
+        ${stg}
+      </div>
+      ${r.note?`<div style="font-size:11px;color:#888;margin-bottom:5px">Note: ${r.note}</div>`:''}
+      ${r.status==='confirmed'?`<div class="rc-ac">
+        <button class="btn bg" style="font-size:12px" onclick="opPay('${r.id}','${r.mid}')">💳 Pay ₹${r.amt}</button>
+        <button class="btn" style="font-size:12px" onclick="canReq('${r.id}','${r.mid}')">Cancel</button>
+      </div>`:''}
+      ${r.status==='paid'?`<div class="rc-ac"><button class="btn bp" style="font-size:12px" onclick="vReceipt('${r.id}','${r.mid}')">🧾 View Receipt</button></div>`:''}
+      ${r.status==='rejected'?`<div style="font-size:11px;color:#791F1F;margin-top:6px;background:#FCEBEB;padding:6px 10px;border-radius:8px">Reason: ${r.reason||'Request declined by manager.'}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+/* ─── ADMIN PAGES ─── */
+function rAdmin(){
+  if(S.tab===0) return rAOv();
+  if(S.tab===1) return rAMenu();
+  if(S.tab===2) return rATime();
+  if(S.tab===3) return rANot();
+  return rAGReqs();
+}
+
+function rAOv(){
+  const d=gd(),m=gm(),u=US[S.user];
+  const ep=pct(d.counts.eat,d.counts.tot),np=pct(d.counts.no,d.counts.tot),ap=pct(d.counts.abs,d.counts.tot);
+  const pend=d.greqs.filter(r=>r.status==='pending').length;
+  const paid=d.greqs.filter(r=>r.status==='paid');
+  const revenue=paid.reduce((s,r)=>s+r.amt,0);
+  return`<div class="mi"><div class="mi-d" style="background:${m.color}"></div><span>Logged in as <b>${u.name}</b> — managing <b>${m.name}</b></span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">Total</div><div class="mv">${d.counts.tot}</div></div>
+    <div class="met"><div class="ml">Will eat</div><div class="mv" style="color:#1D9E75">${d.counts.eat}</div><div class="ms">${ep}%</div></div>
+    <div class="met"><div class="ml">No meal</div><div class="mv" style="color:#BA7517">${d.counts.no}</div><div class="ms">${np}%</div></div>
+    <div class="met"><div class="ml">Absent</div><div class="mv" style="color:#D85A30">${d.counts.abs}</div><div class="ms">${ap}%</div></div>
+  </div>
+  ${pend>0?`<div style="background:#FAEEDA;border-radius:10px;padding:9px 13px;margin-bottom:12px;font-size:12px;color:#633806;display:flex;justify-content:space-between;align-items:center">
+    <span>⚠️ <b>${pend}</b> guest meal request${pend>1?'s':''} awaiting your approval</span>
+    <button class="btn bam" style="font-size:11px;padding:5px 10px" onclick="st(4)">Review →</button>
+  </div>`:''}
+  <div class="g2">
+    <div class="met"><div class="ml">Guest meals served</div><div class="mv">${paid.length}</div></div>
+    <div class="met"><div class="ml">Guest revenue</div><div class="mv" style="color:#534AB7">₹${revenue}</div></div>
+  </div>
+  <div class="card">
+    <div class="sec">Meal attendance</div>
+    <div class="brow"><div class="brt"><span>Will eat</span><span>${d.counts.eat}/${d.counts.tot}</span></div><div class="pb"><div class="pf" style="width:${ep}%;background:#1D9E75"></div></div></div>
+    <div class="brow"><div class="brt"><span>No meal</span><span>${d.counts.no}/${d.counts.tot}</span></div><div class="pb"><div class="pf" style="width:${np}%;background:#EF9F27"></div></div></div>
+    <div class="brow"><div class="brt"><span>Absent</span><span>${d.counts.abs}/${d.counts.tot}</span></div><div class="pb"><div class="pf" style="width:${ap}%;background:#E24B4A"></div></div></div>
+  </div>
+  <div class="g2">
+    <div class="card" style="margin:0"><div class="sec">Lunch count</div><div style="font-size:24px;font-weight:600">${d.counts.eat}</div><div style="font-size:11px;color:#888;margin-top:3px">meals at ${fmt(d.timing.l)}</div></div>
+    <div class="card" style="margin:0"><div class="sec">Dinner count</div><div style="font-size:24px;font-weight:600">${d.counts.eat}</div><div style="font-size:11px;color:#888;margin-top:3px">meals at ${fmt(d.timing.d)}</div></div>
+  </div>`;
+}
+
+function rAMenu(){
+  const d=gd();
+  return`<div class="card"><div class="sec">Update today's menu</div>
+    <div class="ig"><label class="il">Breakfast</label><input type="text" id="ib" value="${d.menu.b}"></div>
+    <div class="ig"><label class="il">Lunch</label><input type="text" id="il2" value="${d.menu.l}"></div>
+    <div class="ig"><label class="il">Dinner</label><input type="text" id="id2" value="${d.menu.d}"></div>
+    <button class="btn bp" onclick="sMenu()">Save menu</button>
+  </div>
+  <div class="card"><div class="sec">Live preview</div>
+    <div class="row"><span class="rl">Breakfast</span><span class="rv">${d.menu.b}</span></div>
+    <div class="row"><span class="rl">Lunch</span><span class="rv">${d.menu.l}</span></div>
+    <div class="row"><span class="rl">Dinner</span><span class="rv">${d.menu.d}</span></div>
+  </div>`;
+}
+
+function rATime(){
+  const d=gd(),m=gm();
+  return`<div class="card"><div class="sec">Update meal timings</div>
+    <div class="ig"><label class="il">Lunch time</label><input type="time" id="ilt" value="${d.timing.l}"></div>
+    <div class="ig"><label class="il">Dinner time</label><input type="time" id="idt" value="${d.timing.d}"></div>
+    <button class="btn bp" onclick="sTime()">Update timings</button>
+  </div>
+  <div class="card"><div class="sec">Guest meal rates (this mess)</div>
+    <div class="row"><span class="rl">Breakfast</span><span class="rv" style="color:#534AB7;font-weight:600">₹${m.rates.breakfast}</span></div>
+    <div class="row"><span class="rl">Lunch</span><span class="rv" style="color:#534AB7;font-weight:600">₹${m.rates.lunch}</span></div>
+    <div class="row"><span class="rl">Dinner</span><span class="rv" style="color:#534AB7;font-weight:600">₹${m.rates.dinner}</span></div>
+  </div>
+  <div class="g2">
+    <div class="card" style="margin:0"><div class="sec">Lunch</div><div class="tp">⏰ ${fmt(d.timing.l)}</div></div>
+    <div class="card" style="margin:0"><div class="sec">Dinner</div><div class="tp">⏰ ${fmt(d.timing.d)}</div></div>
+  </div>`;
+}
+
+function rANot(){
+  const d=gd();
+  return`<div class="card"><div class="sec">Post a notice</div>
+    <div class="ig"><label class="il">Message</label><textarea id="inot" placeholder="e.g. Lunch delayed by 15 mins..."></textarea></div>
+    <button class="btn bp" onclick="pNot()">Post Notice 📢</button>
+  </div>
+  <div class="card"><div class="sec">All notices</div>
+    ${d.notices.map(n=>`<div class="ntc"><div class="nt-t">📢 ${n.ts}</div><div class="nt-d">${n.t}</div></div>`).join('')}
+  </div>`;
+}
+
+function rAGReqs(){
+  const d=gd();
+  const reqs=[...d.greqs].sort((a,b)=>b.cat-a.cat);
+  if(!reqs.length) return`<div class="card" style="text-align:center;padding:28px">
+    <div style="font-size:22px;margin-bottom:8px">📭</div>
+    <div style="font-size:13px;color:#888">No guest meal requests yet.<br>They'll appear here once guests send requests.</div>
+  </div>`;
+  return reqs.map(r=>{
+    const u=US[r.gid];
+    const stg=r.status==='pending'?'<span class="tag tp2">⏳ Pending</span>':r.status==='confirmed'?'<span class="tag tb">✅ Confirmed</span>':r.status==='paid'?'<span class="tag tg">💳 Paid</span>':'<span class="tag tr">❌ Rejected</span>';
+    return`<div class="rc">
+      <div class="rc-h">
+        <div>
+          <div class="rc-nm">${u?u.name:'Guest'} <span style="font-size:10px;color:#bbb">(${r.gid})</span></div>
+          <div class="rc-sb">${r.meal[0].toUpperCase()+r.meal.slice(1)} · ${r.date} · ₹${r.amt}</div>
+        </div>
+        ${stg}
+      </div>
+      ${r.note?`<div style="font-size:11px;color:#888;margin-bottom:6px;padding:5px 8px;background:#f8f7f4;border-radius:7px">📝 ${r.note}</div>`:''}
+      ${r.status==='pending'?`<div class="rc-ac">
+        <button class="btn bg" style="font-size:12px" onclick="confR('${r.id}')">✅ Confirm</button>
+        <button class="btn bred" style="font-size:12px" onclick="opRej('${r.id}')">❌ Reject</button>
+      </div>`:''}
+      ${r.status==='paid'?`<div style="font-size:11px;color:#27500A;margin-top:6px;padding:5px 10px;background:#EAF3DE;border-radius:8px">✅ Payment received · Receipt ID: <b>${r.rcpId}</b> · Via ${r.pmth?r.pmth.toUpperCase():'—'}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+/* ─── STUDENT PAGES ─── */
+function rStudent(){
+  if(S.tab===0) return rSDash();
+  if(S.tab===1) return rSStat();
+  return rSNot();
+}
+function rSDash(){
+  const d=gd(),m=gm(),u=US[S.user];
+  const v=d.votes[S.user]||null;
+  const vc=x=>{if(!v)return'vb';if(x==='e'&&v==='e')return'vb se';if(x==='n'&&v==='n')return'vb sn';if(x==='a'&&v==='a')return'vb sa';return'vb'};
+  return`<div class="mi"><div class="mi-d" style="background:${m.color}"></div><span>Hi <b>${u.name}</b> — ${m.name} · Room ${u.room||'N/A'}</span></div>
+  <div class="card"><div class="sec">Today's menu</div>
+    <div class="row"><span class="rl">Breakfast</span><span class="rv">${d.menu.b}</span></div>
+    <div class="row"><span class="rl">Lunch</span><span class="rv">${d.menu.l}</span></div>
+    <div class="row"><span class="rl">Dinner</span><span class="rv">${d.menu.d}</span></div>
+  </div>
+  <div class="g2">
+    <div class="card" style="margin:0"><div class="sec">Lunch</div><div class="tp">⏰ ${fmt(d.timing.l)}</div></div>
+    <div class="card" style="margin:0"><div class="sec">Dinner</div><div class="tp">⏰ ${fmt(d.timing.d)}</div></div>
+  </div>
+  <div class="card" style="margin-top:0"><div class="sec">Your meal response today</div>
+    ${v?`<div style="padding:8px 12px;border-radius:10px;font-size:13px;font-weight:600;margin-bottom:10px;background:${v==='e'?'#E1F5EE':v==='n'?'#FAEEDA':'#FAECE7'};color:${v==='e'?'#0F6E56':v==='n'?'#633806':'#4A1B0C'}">${v==='e'?'✅ Marked: Will Eat':v==='n'?'❌ Marked: No Meal':'🚫 Marked: Absent'}</div>`:
+    `<p style="font-size:12px;color:#888;margin-bottom:10px">Please mark your meal status for today.</p>`}
+    <div class="g3">
+      <button class="${vc('e')}" onclick="sVote('e')"><span class="vi">✅</span>Will Eat</button>
+      <button class="${vc('n')}" onclick="sVote('n')"><span class="vi">❌</span>No Meal</button>
+      <button class="${vc('a')}" onclick="sVote('a')"><span class="vi">🚫</span>Absent</button>
+    </div>
+  </div>
+  <div class="card"><div class="sec">Notice board</div>
+    ${d.notices.slice(0,2).map(n=>`<div class="ntc"><div class="nt-t">📢 ${n.ts}</div><div class="nt-d">${n.t}</div></div>`).join('')}
+  </div>`;
+}
+function rSStat(){
+  const d=gd(),v=d.votes[S.user]||null;
+  const h=[{dt:'Wed, 8 Apr',s:v},{dt:'Tue, 7 Apr',s:'e'},{dt:'Mon, 6 Apr',s:'n'},{dt:'Sun, 5 Apr',s:'a'},{dt:'Sat, 4 Apr',s:'e'}];
+  const stg=s=>s==='e'?'<span class="tag tg">Will Eat</span>':s==='n'?'<span class="tag ta">No Meal</span>':s==='a'?'<span class="tag tr">Absent</span>':'<span class="tag" style="background:#f0efe9;color:#888">—</span>';
+  return`<div class="card"><div class="sec">Today's status</div>
+    <div style="font-size:12px;color:#888;margin-bottom:9px">Wednesday, 8 April 2026</div>
+    ${v?`<div style="padding:8px 12px;border-radius:10px;font-size:13px;font-weight:600;background:${v==='e'?'#E1F5EE':v==='n'?'#FAEEDA':'#FAECE7'};color:${v==='e'?'#0F6E56':v==='n'?'#633806':'#4A1B0C'}">${v==='e'?'✅ Will Eat':v==='n'?'❌ No Meal':'🚫 Absent'}</div>`:`<div style="padding:8px 12px;border-radius:10px;font-size:13px;background:#f8f7f4;color:#888">⏳ Not marked yet</div>`}
+  </div>
+  <div class="card"><div class="sec">Previous days</div>${h.map(x=>`<div class="sr"><span>${x.dt}</span>${stg(x.s)}</div>`).join('')}</div>
+  <div class="card"><div class="sec">Monthly summary</div>
+    <div class="brow"><div class="brt"><span>Ate meals</span><span>18 days</span></div><div class="pb"><div class="pf" style="width:72%;background:#1D9E75"></div></div></div>
+    <div class="brow"><div class="brt"><span>No meal</span><span>5 days</span></div><div class="pb"><div class="pf" style="width:20%;background:#EF9F27"></div></div></div>
+    <div class="brow"><div class="brt"><span>Absent</span><span>2 days</span></div><div class="pb"><div class="pf" style="width:8%;background:#E24B4A"></div></div></div>
+  </div>`;
+}
+function rSNot(){
+  const d=gd();
+  return`<div class="card"><div class="sec">Notice board</div>
+    ${d.notices.map(n=>`<div class="ntc"><div class="nt-t">📢 ${n.ts}</div><div class="nt-d">${n.t}</div></div>`).join('')}
+  </div>`;
+}
+
+/* ─── MODALS ─── */
+function rModal(){
+  if(!S.modal) return'';
+  if(S.modal.tp==='pay') return rPayMdl();
+  if(S.modal.tp==='rej') return rRejMdl();
+  return'';
+}
+function rPayMdl(){
+  const {rid,mid}=S.modal,d=DT[mid],m=MS.find(x=>x.id===mid);
+  const r=d.greqs.find(x=>x.id===rid);if(!r)return'';
+  return`<div class="mbg" onclick="if(event.target===this){S.modal=null;render()}"><div class="mdl">
+    <div style="font-size:15px;font-weight:700;margin-bottom:3px">Payment Gateway</div>
+    <div style="font-size:11px;color:#888;margin-bottom:16px">${m.name} · ${r.meal[0].toUpperCase()+r.meal.slice(1)} · ${r.date}</div>
+    <div style="background:#f8f7f4;border-radius:12px;padding:13px;margin-bottom:14px">
+      <div class="row" style="padding:4px 0"><span class="rl">Meal</span><span class="rv">${r.meal[0].toUpperCase()+r.meal.slice(1)}</span></div>
+      <div class="row" style="padding:4px 0"><span class="rl">Mess</span><span class="rv">${m.name}</span></div>
+      <div class="row" style="padding:4px 0"><span class="rl">Rate</span><span class="rv">₹${r.amt}</span></div>
+      <div class="row" style="padding:7px 0;border-top:1px solid rgba(0,0,0,.07);margin-top:4px">
+        <span style="font-weight:600;font-size:13px">Total</span>
+        <span style="font-size:17px;font-weight:700;color:#534AB7">₹${r.amt}</span>
+      </div>
+    </div>
+    <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#999;margin-bottom:8px">Select payment method</div>
+    <div class="g3" style="margin-bottom:14px">
+      <button class="pay-mth-btn${S.modal.mth==='upi'?' sel':''}" onclick="S.modal.mth='upi';S.modal.err='';render()">📱<br><span style="font-size:10px">UPI</span></button>
+      <button class="pay-mth-btn${S.modal.mth==='card'?' sel':''}" onclick="S.modal.mth='card';S.modal.err='';render()">💳<br><span style="font-size:10px">Card</span></button>
+      <button class="pay-mth-btn${S.modal.mth==='cash'?' sel':''}" onclick="S.modal.mth='cash';S.modal.err='';render()">💵<br><span style="font-size:10px">Cash</span></button>
+    </div>
+    ${S.modal.mth==='upi'?`<div class="ig"><label class="il">UPI ID</label><input type="text" id="upid" placeholder="yourname@okaxis / @upi"></div>`:''}
+    ${S.modal.mth==='card'?`<div>
+      <div class="ig"><label class="il">Card number (last 4 digits)</label><input type="number" id="cno" placeholder="e.g. 4242" style="max-width:120px"></div>
+    </div>`:''}
+    ${S.modal.mth==='cash'?`<div style="background:#EAF3DE;border-radius:10px;padding:10px 13px;font-size:12px;color:#27500A;margin-bottom:12px">💵 Pay <b>₹${r.amt}</b> in cash at the mess counter. Show this screen to the manager to confirm payment.</div>`:''}
+    ${S.modal.err?`<div class="err">${S.modal.err}</div>`:''}
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn" style="flex:1;justify-content:center;font-size:13px" onclick="S.modal=null;render()">Cancel</button>
+      <button class="btn bg" style="flex:1;justify-content:center;font-size:13px;font-weight:600" onclick="doPay('${rid}','${mid}')">Pay ₹${r.amt}</button>
+    </div>
+  </div></div>`;
+}
+function rRejMdl(){
+  const {rid}=S.modal;
+  return`<div class="mbg" onclick="if(event.target===this){S.modal=null;render()}"><div class="mdl">
+    <div style="font-size:15px;font-weight:700;margin-bottom:14px">Reject Guest Request</div>
+    <div class="ig"><label class="il">Reason (optional)</label><textarea id="rrea" placeholder="e.g. Mess is full today. Try tomorrow."></textarea></div>
+    ${S.modal.err?`<div class="err">${S.modal.err}</div>`:''}
+    <div style="display:flex;gap:8px">
+      <button class="btn" style="flex:1;justify-content:center;font-size:13px" onclick="S.modal=null;render()">Cancel</button>
+      <button class="btn bred" style="flex:1;justify-content:center;font-size:13px" onclick="doRej('${rid}')">Reject Request</button>
+    </div>
+  </div></div>`;
+}
+
+/* ─── RECEIPT PAGE ─── */
+function rReceipt(){
+  const rid=S.rv,mid=S.rm,d=DT[mid],m=MS.find(x=>x.id===mid);
+  const r=d.greqs.find(x=>x.id===rid),u=US[r.gid];
+  return`<div style="max-width:340px;margin:0 auto">
+    <button class="btn" style="margin-bottom:14px;font-size:12px" onclick="backRec()">← Back to My Requests</button>
+    <div class="rbox">
+      <div style="font-size:28px;margin-bottom:5px">🍛</div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:2px;color:#1a1a1a">MessTrack</div>
+      <div style="font-size:11px;color:#888;margin-bottom:14px">${m.name} · ${m.hostel}</div>
+      <div style="background:#fff;border-radius:12px;padding:16px;text-align:left;border:0.5px solid rgba(0,0,0,.06)">
+        <div style="text-align:center;margin-bottom:12px">
+          <span class="tag tg" style="font-size:12px;padding:4px 14px">✅ Payment Successful</span>
+        </div>
+        <div class="rdiv"></div>
+        <div class="rrow"><span style="color:#888">Receipt No.</span><span style="font-weight:700">${r.rcpId}</span></div>
+        <div class="rrow"><span style="color:#888">Guest Name</span><span>${u?u.name:'Guest'}</span></div>
+        <div class="rrow"><span style="color:#888">Guest ID</span><span>${r.gid}</span></div>
+        <div class="rrow"><span style="color:#888">Mess</span><span>${m.name}</span></div>
+        <div class="rrow"><span style="color:#888">Hostel</span><span>${m.hostel}</span></div>
+        <div class="rrow"><span style="color:#888">Meal</span><span>${r.meal[0].toUpperCase()+r.meal.slice(1)}</span></div>
+        <div class="rrow"><span style="color:#888">Date</span><span>${r.date}</span></div>
+        <div class="rrow"><span style="color:#888">Payment via</span><span style="font-weight:600">${r.pmth?r.pmth.toUpperCase():'—'}</span></div>
+        <div class="rdiv"></div>
+        <div class="rtot"><span>Amount Paid</span><span style="color:#534AB7">₹${r.amt}</span></div>
+        <div class="rdiv"></div>
+        <div style="font-size:10px;color:#bbb;text-align:center">Paid on: ${r.pat||'—'}</div>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:#888">📌 Show this receipt at the mess entrance gate</div>
+    </div>
+    <button class="btn bw" style="font-size:13px;margin-top:5px" onclick="backRec()">✓ Done</button>
+  </div>`;
+}
+
+/* ─── ACTIONS ─── */
+function selMess(id){S.sm=id;S.le='';S.li='';S.sc='login';render()}
+function st(i){S.tab=i;render()}
+function logout(){S.user=null;S.mess=null;S.sc='land';S.tab=0;render()}
+function backRec(){S.sc='app';S.tab=S.user&&US[S.user].role==='guest'?1:0;render()}
+
+function updR(){
+  const el=document.getElementById('grate');if(!el)return;
+  const mid=document.getElementById('gms').value,ml=document.getElementById('gml').value;
+  const m=MS.find(x=>x.id===mid);
+  if(m&&m.rates[ml]) el.innerHTML=`Estimated charge for <b>${ml}</b> at ${m.name}: <span style="font-size:16px;font-weight:700;color:#534AB7">₹${m.rates[ml]}</span>`;
+}
+
+function dLogin(){
+  const id=document.getElementById('lid').value.trim(),pw=document.getElementById('lpw').value.trim();
+  const u=US[id];
+  if(!u){S.le='User ID not found.';render();return}
+  if(u.pass!==pw){S.le='Incorrect password.';render();return}
+  if(u.mess!==S.sm){S.le='This account belongs to '+MS.find(m=>m.id===u.mess).name+'. Please log in from that mess.';render();return}
+  if(u.role!==S.lr){S.le='This ID is for a '+u.role+', not '+S.lr+'.';render();return}
+  S.user=id;S.mess=u.mess;S.tab=0;S.sc='app';S.le='';render();
+}
+function dGLogin(){
+  const id=document.getElementById('lid').value.trim(),pw=document.getElementById('lpw').value.trim();
+  const u=US[id];
+  if(!u||u.role!=='guest'){S.le='Guest ID not found.';render();return}
+  if(u.pass!==pw){S.le='Incorrect password.';render();return}
+  S.user=id;S.mess=null;S.tab=0;S.sc='app';S.le='';render();
+}
+function subGReq(){
+  const mid=document.getElementById('gms').value,ml=document.getElementById('gml').value;
+  const date=document.getElementById('gdt').value,note=document.getElementById('gnote').value.trim();
+  const m=MS.find(x=>x.id===mid);
+  DT[mid].greqs.push({id:'REQ'+gid(),gid:S.user,meal:ml,date,note,amt:m.rates[ml],status:'pending',cat:Date.now(),mid});
+  S.tab=1;render();
+}
+function confR(rid){const d=gd(),r=d.greqs.find(x=>x.id===rid);if(r){r.status='confirmed';render()}}
+function opRej(rid){S.modal={tp:'rej',rid,err:''};render()}
+function doRej(rid){
+  const rea=document.getElementById('rrea').value.trim();
+  const d=gd(),r=d.greqs.find(x=>x.id===rid);
+  if(r){r.status='rejected';r.reason=rea||'Request declined by manager.';S.modal=null;render();}
+}
+function opPay(rid,mid){S.modal={tp:'pay',rid,mid,mth:null,err:''};render()}
+function doPay(rid,mid){
+  const mo=S.modal;
+  if(!mo.mth){mo.err='Please select a payment method.';render();return}
+  if(mo.mth==='upi'){const v=document.getElementById('upid').value.trim();if(!v){mo.err='Please enter your UPI ID.';render();return}}
+  if(mo.mth==='card'){const v=document.getElementById('cno').value.trim();if(!v||v.length>4){mo.err='Enter last 4 digits of card.';render();return}}
+  const r=DT[mid].greqs.find(x=>x.id===rid);
+  if(r){r.status='paid';r.pmth=mo.mth;r.rcpId='RCP'+Math.floor(Math.random()*90000+10000);r.pat=now2();S.modal=null;S.rv=rid;S.rm=mid;S.sc='receipt';render();}
+}
+function canReq(rid,mid){const r=DT[mid].greqs.find(x=>x.id===rid);if(r){r.status='rejected';r.reason='Cancelled by guest.';render();}}
+function vReceipt(rid,mid){S.rv=rid;S.rm=mid;S.sc='receipt';render()}
+function sMenu(){const d=gd();d.menu.b=document.getElementById('ib').value||d.menu.b;d.menu.l=document.getElementById('il2').value||d.menu.l;d.menu.d=document.getElementById('id2').value||d.menu.d;render()}
+function sTime(){const d=gd();d.timing.l=document.getElementById('ilt').value||d.timing.l;d.timing.d=document.getElementById('idt').value||d.timing.d;render()}
+function pNot(){const v=document.getElementById('inot').value.trim();if(!v)return;gd().notices.unshift({t:v,ts:'Just now'});render()}
+function sVote(v){const d=gd();d.votes[S.user]=v;if(v==='e')d.counts.eat=Math.min(d.counts.tot,d.counts.eat+1);else if(v==='n')d.counts.no=Math.min(d.counts.tot,d.counts.no+1);else d.counts.abs=Math.min(d.counts.tot,d.counts.abs+1);render()}
+
+render();
+</script>
 </body>
 </html>
